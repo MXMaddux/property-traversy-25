@@ -1,4 +1,3 @@
-// components/PropertyCard.tsx
 import Image from "next/image";
 import Link from "next/link";
 import {
@@ -8,9 +7,44 @@ import {
   FaMoneyBill,
   FaMapMarker,
 } from "react-icons/fa";
-import { Property } from "@/types";
 
-function PropertyCard({ property }: { property: Property }) {
+interface Property {
+  _id: string;
+  owner: string;
+  name: string;
+  type: string;
+  description: string;
+  location: {
+    street: string;
+    city: string;
+    state: string;
+    zipcode: string;
+  };
+  beds: number;
+  baths: number;
+  square_feet: number;
+  amenities: string[];
+  rates: {
+    weekly?: number;
+    monthly?: number;
+    nightly?: number;
+  };
+  seller_info: {
+    name: string;
+    email: string;
+    phone: string;
+  };
+  images: string[];
+  is_featured: boolean;
+  createdAt: string;
+  updatedAt: string;
+}
+
+interface PropertyCardProps {
+  property: Property;
+}
+
+const PropertyCard: React.FC<PropertyCardProps> = ({ property }) => {
   const getRateDisplay = () => {
     const { rates } = property;
     if (rates.monthly) {
@@ -20,15 +54,17 @@ function PropertyCard({ property }: { property: Property }) {
     } else if (rates.nightly) {
       return `$${rates.nightly.toLocaleString()}/night`;
     }
+    return "";
   };
+
   return (
     <div className="rounded-xl shadow-md relative">
       <Image
         src={`/images/properties/${property.images[0]}`}
-        width={0}
-        height={0}
+        alt=""
+        width="0"
+        height="0"
         sizes="100vw"
-        alt={property.name}
         className="w-full h-auto rounded-t-xl"
       />
       <div className="p-4">
@@ -37,43 +73,42 @@ function PropertyCard({ property }: { property: Property }) {
           <h3 className="text-xl font-bold">{property.name}</h3>
         </div>
         <h3 className="absolute top-[10px] right-[10px] bg-white px-4 py-2 rounded-lg text-blue-500 font-bold text-right md:text-center lg:text-right">
-          {property.rates.monthly
-            ? `$${property.rates.monthly}/mo`
-            : `$${property.rates.weekly}/wk`}
+          {getRateDisplay()}
         </h3>
+
         <div className="flex justify-center gap-4 text-gray-500 mb-4">
           <p>
-            <FaBed /> {property.beds}{" "}
+            <FaBed className="md:hidden lg:inline" /> {property.beds}{" "}
             <span className="md:hidden lg:inline">Beds</span>
           </p>
           <p>
-            <FaBath /> {property.baths}{" "}
+            <FaBath className="md:hidden lg:inline" /> {property.baths}{" "}
             <span className="md:hidden lg:inline">Baths</span>
           </p>
           <p>
-            <FaRulerCombined />
+            <FaRulerCombined className="md:hidden lg:inline" />
             {property.square_feet}{" "}
             <span className="md:hidden lg:inline">sqft</span>
           </p>
         </div>
+
         <div className="flex justify-center gap-4 text-green-900 text-sm mb-4">
-          {property.rates.weekly && (
-            <p>
-              <FaMoneyBill /> Weekly
-            </p>
-          )}
-          {property.rates.monthly && (
-            <p>
-              <FaMoneyBill /> Monthly
-            </p>
-          )}
+          <p>
+            <FaMoneyBill className="md:hidden lg:inline" /> Weekly
+          </p>
+          <p>
+            <FaMoneyBill className="md:hidden lg:inline" /> Monthly
+          </p>
         </div>
+
         <div className="border border-gray-100 mb-5"></div>
+
         <div className="flex flex-col lg:flex-row justify-between mb-4">
           <div className="flex align-middle gap-2 mb-4 lg:mb-0">
-            <FaMapMarker className="text-lg text-orange-700" />
+            <FaMapMarker className="text-orange-700 mt-1" />
             <span className="text-orange-700">
-              {property.location.city} {property.location.state}
+              {" "}
+              {property.location.city} {property.location.state}{" "}
             </span>
           </div>
           <Link
@@ -86,6 +121,6 @@ function PropertyCard({ property }: { property: Property }) {
       </div>
     </div>
   );
-}
+};
 
 export default PropertyCard;
