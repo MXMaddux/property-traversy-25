@@ -9,7 +9,6 @@ import {
   FaMapMarker,
 } from "react-icons/fa";
 import { Property } from "@/types";
-import image from "@/assets/images/a1.jpg";
 
 function PropertyCard({ property }: { property: Property }) {
   const getRateDisplay = () => {
