@@ -12,12 +12,18 @@ export default {
         background: "var(--background)",
         foreground: "var(--foreground)",
       },
+      gridTemplateColumns: {
+        "70/30": "70% 28%", // Fixed the extra space
+      },
     },
     fontFamily: {
       sans: ["Poppins", "sans-serif"],
     },
-    gridTemplateColumns: {
-      "70/30": "70% 28 %",
+    screens: {
+      sm: "640px",
+      md: "768px",
+      lg: "1024px",
+      xl: "1280px",
     },
   },
   plugins: [],

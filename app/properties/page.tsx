@@ -1,6 +1,6 @@
 import PropertyCard from "@/components/PropertyCard";
-import properties from "@/properties.json";
-import { Property } from "@/types";
+import Property from "@/models/Property";
+import connectDb from "@/config/database";
 
 type PropertyPageProps = {
   params: {
@@ -8,22 +8,31 @@ type PropertyPageProps = {
   };
 };
 
-function PropertiesPage({ params }: PropertyPageProps) {
-  return (
-    <section className="px-4 py-6">
-      <div className="container-xl lg:container m-auto px-4 py-6">
-        {properties.length === 0 ? (
-          <p>No properties found.</p>
-        ) : (
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {properties.map((property: Property) => (
-              <PropertyCard key={property._id} property={property} />
-            ))}
-          </div>
-        )}
-      </div>
-    </section>
-  );
+async function PropertiesPage({ params }: PropertyPageProps) {
+  await connectDb();
+  try {
+    // Fetch all properties from the database
+    const properties = await Property.find({}).lean();
+
+    return (
+      <section className="px-4 py-6">
+        <div className="container-xl lg:container m-auto px-4 py-6">
+          {properties.length === 0 ? (
+            <p>No properties found.</p>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              {properties.map((property) => (
+                <PropertyCard key={String(property._id)} property={property} />
+              ))}
+            </div>
+          )}
+        </div>
+      </section>
+    );
+  } catch (error) {
+    console.error("Error fetching properties:", error);
+    return <p>Error loading properties.</p>;
+  }
 }
 
 export default PropertiesPage;

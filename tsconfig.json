@@ -23,6 +23,12 @@
       "@/*": ["./*"] // Alias for absolute imports
     }
   },
-  "include": ["**/*.ts", "**/*.tsx", "next-env.d.ts", ".next/types/**/*.ts"], // Include TypeScript and Next.js environment files
+  "include": [
+    "**/*.ts",
+    "**/*.tsx",
+    "next-env.d.ts",
+    ".next/types/**/*.ts",
+    "next.config.mjs"
+  ], // Include TypeScript and Next.js environment files
   "exclude": ["node_modules"] // Exclude `node_modules` from type checking
 }
